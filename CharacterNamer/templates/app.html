@@ -14,20 +14,12 @@
 	<div data-role="content">	
 		<form>
 			<h3>Search Terms</h3>
-			<div class="ui-grid-b">
-				<div class="ui-block-a" style="width:75%">
-					<input type="search" name="search" id="search-basic" value="" />
-				</div>
-				
-				<div class="ui-block-b" style="width:25%">
-					<select >
-						<option>Name</option>
-						<option>Meaning</option>
-					</select>
-				</div>
-			</div><!-- /grid-b -->
 			
-			
+			<input type="search" name="search" id="search-basic" value="" />
+			<div data-role="controlgroup" data-type="horizontal" >
+				<a href="index.html" data-role="button">Name</a>
+				<a href="index.html" data-role="button">Meaning</a>
+			</div>
 
 			<button class="btn">Add Another Term</button>
 
