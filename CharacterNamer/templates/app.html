@@ -1,5 +1,140 @@
 {% extends 'base.html' %}
 
 {% block title %}
-	<title>APP.html</title>
+	<title>Name Picker</title>
 {% endblock %}
+
+{% block content %}
+<div data-role="page" id="search-page">
+
+	<div data-role="header">
+		<h1>SEARCH</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		<form>
+			<input type="search" name="search" id="search-basic" value="" data-mini="true"/>
+
+			<select class="input-small" data-mini="true">
+				<option>Name</option>
+				<option>Meaning</option>
+			</select>
+			<button class="btn" data-mini="true">Add Another Term</button>
+
+			<h3>Origin</h3>
+			<select>
+				<option>America</option>
+			</select>
+			<button class="btn">+</button>
+
+			<h3>Gender</h3>
+			<div data-role="controlgroup" data-type="horizontal">
+				<a href="index.html" data-role="button">Male</a>
+				<a href="index.html" data-role="button">Female</a>
+				<a href="index.html" data-role="button">Both</a>
+				<a href="index.html" data-role="button">Either</a>
+			</div>
+
+			<h3>Length</h3>
+			<input type="text" placeholder="min"> - <input type="text" placeholder="max">
+			
+			<h3>Usage</h3>
+			<div data-role="controlgroup" data-type="horizontal">
+				<a href="index.html" data-role="button">Used</a>
+				<a href="index.html" data-role="button">Unused</a>
+				<a href="index.html" data-role="button">Either</a>
+			</div>
+
+			<h3>Favorites</h3>
+			<label><input type="checkbox" name="checkbox-0" /> Favorites only</label>
+			
+			<button class="btn">Search</button>
+			<button class="btn">Add a name</button>
+		</form>
+
+
+		<p><a href="#results-page">Results</a></p>		
+	</div><!-- /content -->
+
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+
+<div data-role="page" id="results-page">
+
+	<div data-role="header">
+		<h1>RESULTS</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		<p><a href="#name-page">AVERY</a></p>		
+	</div><!-- /content -->
+
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+
+<div data-role="page" id="name-page">
+
+	<div data-role="header">
+		<h1>NAME</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		<p>Page content goes here.</p>		
+	</div><!-- /content -->
+
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div><!-- /footer -->
+</div><!-- /page -->
+{% endblock %}
+<!-- 	<div class="container">
+		<div class="row">
+			<h1>Search</h1>
+			<form class="form-search">
+				<input type="text" class="input-medium search-query">
+				<select class="input-small">
+					<option>Name</option>
+					<option>Meaning</option>
+				</select>
+				<button class="btn">Add Another Term</button>
+
+				<h3>Origin</h3>
+				<select>
+					<option>America</option>
+				</select>
+				<button class="btn">+</button>
+
+				<h3>Gender</h3>
+				<div class="btn-group">
+					<button class="btn">Male</button>
+					<button class="btn">Female</button>
+					<button class="btn">Both</button>
+					<button class="btn active">Either</button>
+				</div>
+
+				<h3>Length</h3>
+				<input type="textbox" class="input-small" placeholder="min"> - <input type="textbox" class="input-small" placeholder="max">
+
+				<h3>Usage</h3>
+				<div class="btn-group">
+					<button class="btn">Used</button>
+					<button class="btn">Unused</button>
+					<button class="btn active">Either</button>
+				</div>
+
+				<h3>Favorites</h3>
+				<input type="checkbox"> Favorites only
+
+				
+				<br><br>
+				<button class="btn">Search</button><br>
+				<button class="btn">Add a name</button>
+			</form>
+		</div>
+	</div> -->
