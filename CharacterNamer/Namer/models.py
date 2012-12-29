@@ -6,6 +6,7 @@ class Name(models.Model):
 	gender = models.CharField(max_length=10) #male, female, both
 	origin = models.CharField(max_length=20,blank=True, default="")
 	meaning = models.TextField(blank=True, default="")
+	favorite = models.BooleanField(default=False, blank=True)
 
 class NameUsage(models.Model):
 	title = models.CharField(max_length=200)

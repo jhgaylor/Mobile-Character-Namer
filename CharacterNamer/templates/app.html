@@ -7,47 +7,52 @@
 {% block content %}
 	<div class="container">
 		<div class="row">
-			<h1>Search</h1>
-			<form class="form-search">
-				<input type="text" class="input-medium search-query">
-				<select class="input-small">
-					<option>Name</option>
-					<option>Meaning</option>
-				</select>
-				<button class="btn">Add Another Term</button>
+			<form>
+				<fieldset>
+					<legend>Search</legend>
+					<label>Search Terms</label>
+					<input type="text" class=" search-query">
+					<select class="input-small">
+						<option>Name</option>
+						<option>Meaning</option>
+					</select>
 
-				<h3>Origin</h3>
-				<select>
-					<option>America</option>
-				</select>
-				<button class="btn">+</button>
+					<button class="btn">Add Another Term</button>
 
-				<h3>Gender</h3>
-				<div class="btn-group">
-					<button class="btn">Male</button>
-					<button class="btn">Female</button>
-					<button class="btn">Both</button>
-					<button class="btn active">Either</button>
-				</div>
 
-				<h3>Length</h3>
-				<input type="textbox" class="input-small" placeholder="min"> - <input type="textbox" class="input-small" placeholder="max">
-
-				<h3>Usage</h3>
-				<div class="btn-group">
-					<button class="btn">Used</button>
-					<button class="btn">Unused</button>
-					<button class="btn active">Either</button>
-				</div>
-
-				<h3>Favorites</h3>
-				<input type="checkbox"> Favorites only
-
+					<label>Origin</label>
+					<select>
+						<option>America</option>
+					</select>
+					<button class="btn">+</button>
+					
+					<label>Gender</label>
+					<select>
+						<option>Male</option>
+						<option>Female</option>
+						<option>Both</option>
+						<option>Either</option>
+					</select>
 				
-				<br><br>
-				<button class="btn">Search</button><br>
-				<button class="btn">Add a name</button>
+
+					<label>Length</label>
+					<input type="textbox" class="input-small" placeholder="min"> - <input type="textbox" class="input-small" placeholder="max">
+
+					<label>Usage</label>
+					<select>
+						<option>Used</option>
+						<option>Unused</option>
+						<option>Either</option>
+					</select>
+
+					<label class="checkbox">
+						<input type="checkbox"> Favorites only
+					</label>
+					<button class="btn">Search</button><br>
+					<button class="btn">Add a name</button>
+				</fieldset>
 			</form>
+			
 		</div>
 	</div>
 {% endblock %}
