@@ -7,53 +7,107 @@
 {% block content %}
 	<div class="container">
 		<div class="row">
-			<form>
+			<form id="search-form">
 				<fieldset>
 					<legend>Search</legend>
-					<label>Search Terms</label>
-					<input type="text" class=" search-query">
-					<select class="input-small">
-						<option>Name</option>
-						<option>Meaning</option>
-					</select>
+					<div id="search-terms">
+						<label>Search Terms</label>
+						<div class="search-term">
+							<input type="text" class=" search-query">
+							<select class="input-small">
+								<option>Name</option>
+								<option selected="selected">Meaning</option>
+							</select>
+						</div>
+					</div>
+					<button class="btn" id="add-term">Add Another Term</button>
 
-					<button class="btn">Add Another Term</button>
-
-
-					<label>Origin</label>
-					<select>
-						<option>America</option>
-					</select>
-					<button class="btn">+</button>
+					<div id="origins">
+						<label>Origin</label>
+						<div class="origin">
+							<select>
+								<option selected="selected">Any</option>
+								<option>America</option>
+							</select>
+						</div>
+					</div>
+					<button class="btn" id="add-origin">Add Another origin</button>
 					
 					<label>Gender</label>
-					<select>
-						<option>Male</option>
-						<option>Female</option>
-						<option>Both</option>
-						<option>Either</option>
-					</select>
+					
+					<div class="btn-group">
+						<button class="btn">Male</button>
+						<button class="btn">Female</button>
+						<button class="btn">Both</button>
+						<button class="btn active">Either</button>
+					</div>
 				
 
 					<label>Length</label>
 					<input type="textbox" class="input-small" placeholder="min"> - <input type="textbox" class="input-small" placeholder="max">
 
 					<label>Usage</label>
-					<select>
-						<option>Used</option>
-						<option>Unused</option>
-						<option>Either</option>
-					</select>
+					<div class="btn-group">
+						<button class="btn">Used</button>
+						<button class="btn">Unused</button>
+						<button class="btn active">Either</button>
+					</div>
+					
 
 					<label class="checkbox">
-						<input type="checkbox"> Favorites only
+						<input type="checkbox" id="favorites-only"> Favorites only
 					</label>
-					<button class="btn">Search</button><br>
-					<button class="btn">Add a name</button>
+					<button class="btn" id="submit-search">Search</button><br>
+					<button class="btn" id="add-name">Add a name</button>
 				</fieldset>
 			</form>
 			
 		</div>
 	</div>
+
+<script>
+	$(document).ready(function () {
+		function make_search_term(){
+			$term_div = $('<div class="search-term"></div>')
+			$term_text = $('<input type="text" />').addClass('search-query')
+			$term_select =  $('<select></select>').addClass('input-small')
+							.append($('<option value="name">Name</option>'))
+							.append($('<option value="meaning" selected="selected">Meaning</option>'))
+			return $term_div.append($term_text).append($term_select)
+		}
+		
+		function make_origin(){
+			$origin_div = $('<div class="origin"></div>')
+			$origin_select = 	$('<select></select>')
+								.append('<option selected="selected">Any</option>')
+								.append('<option>America</option>')
+			return $origin_div.append($origin_select)
+		}
+
+						
+
+		$('#add-term').on('click', function (e){
+			e.preventDefault();
+			$('#search-terms').append(make_search_term())
+		});
+
+		$('#add-origin').on('click', function (e){
+			e.preventDefault();
+			$('#origins').append(make_origin())
+		});
+
+		$('.btn-group ').on('click', 'button', function (e){
+			e.preventDefault();
+			$(this).siblings().removeClass('active');
+			$(this).addClass('active');
+		});
+
+		$('#submit-search').on('click', function (e) {
+			e.preventDefault();
+			alert('clicked');
+		});
+	});
+</script>
+
 {% endblock %}
 
