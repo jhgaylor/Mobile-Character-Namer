@@ -6,107 +6,244 @@
 
 {% block content %}
 	<div class="container">
-		<div class="row">
-			<form id="search-form">
-				<fieldset>
-					<legend>Search</legend>
-					<div id="search-terms">
-						<label>Search Terms</label>
-						<div class="search-term">
-							<input type="text" class=" search-query">
-							<select class="input-small">
-								<option>Name</option>
-								<option selected="selected">Meaning</option>
-							</select>
-						</div>
-					</div>
-					<button class="btn" id="add-term">Add Another Term</button>
-
-					<div id="origins">
-						<label>Origin</label>
-						<div class="origin">
-							<select>
-								<option selected="selected">Any</option>
-								<option>America</option>
-							</select>
-						</div>
-					</div>
-					<button class="btn" id="add-origin">Add Another origin</button>
-					
-					<label>Gender</label>
-					
-					<div class="btn-group">
-						<button class="btn">Male</button>
-						<button class="btn">Female</button>
-						<button class="btn">Both</button>
-						<button class="btn active">Either</button>
-					</div>
-				
-
-					<label>Length</label>
-					<input type="textbox" class="input-small" placeholder="min"> - <input type="textbox" class="input-small" placeholder="max">
-
-					<label>Usage</label>
-					<div class="btn-group">
-						<button class="btn">Used</button>
-						<button class="btn">Unused</button>
-						<button class="btn active">Either</button>
-					</div>
-					
-
-					<label class="checkbox">
-						<input type="checkbox" id="favorites-only"> Favorites only
-					</label>
-					<button class="btn" id="submit-search">Search</button><br>
-					<button class="btn" id="add-name">Add a name</button>
-				</fieldset>
-			</form>
+		
+		<div class="row" id="search-row">
 			
 		</div>
 	</div>
 
 <script>
 	$(document).ready(function () {
-		function make_search_term(){
+
+	});
+
+	default_search_form = {
+		"search_terms": [
+			{
+				"term": "",
+				"classification": "meaning"
+			}
+		],
+		"origins": [
+			"any"
+		],
+		"gender": "Either",
+		"length": {
+			"min": "",
+			"max": ""
+		},
+		"usage": "Either",
+		"favorite": false
+	}
+
+
+
+
+	SearchForm = Backbone.Model.extend({
+		update_search_terms: function (terms) {
+			this.set({'search_terms': terms})
+		},
+		update_origins: function (origins){
+			this.set({'origins':origins})
+		},
+		update_gender: function (gender){
+			this.set({'gender':gender})
+		},
+		update_lengths: function (lengths){
+			this.set({'lengths':lengths})
+		},
+		update_usage: function (usage){
+			this.set({'usage':usage})
+		},
+		update_favorites: function (favorites){
+			this.set({'favorites':favorites})
+		},
+	});
+
+	SearchView = Backbone.View.extend({
+		el: '#search-row',
+		id: 'search-form',
+		events: {
+			"change #search-terms": "update_search_terms",
+			"change #origins": "update_origins",
+			"click #gender-buttons": "update_gender",
+			"change #lengths": "update_lengths",
+			"click #usage-buttons": "update_usage",
+			"change #favorites-only": "update_favorites",
+			"click .btn-group .btn": "redraw_button_group",
+			"click #add-term": "add_search_term",
+			"click #add-origin": "add_origin",
+			"click #submit-search": "submit_form"
+		},
+		template: _.template(
+			'<form id="search-form">'+
+				'<fieldset>'+
+				'<legend>Search</legend>'+
+				'<div id="search-terms">'+
+					'<label>Search Terms</label>'+
+					'<% _.each(this.model.get("search_terms"), function (element, index, list) { print(this.make_search_term(element.term, element.classification)); }, this) %>'+
+				'</div>'+
+				'<button class="btn" id="add-term">Add another term</button>'+
+				'<div id="origins">'+
+					'<label>Origin</label>'+
+					'<% _.each(this.model.get("origins"), function (element, index, list) { print(this.make_origin(element)); }, this) %>'+
+				'</div>'+
+				'<button class="btn" id="add-origin">Add Another origin</button>'+
+				'<label>Gender</label>'+
+				'<div class="btn-group" id="gender-buttons">'+
+					'<button class="btn <% if (this.model.get("gender") == "Male") { print("active"); } %>">Male</button>'+
+					'<button class="btn <% if (this.model.get("gender") == "Female") { print("active"); } %>">Female</button>'+
+					'<button class="btn <% if (this.model.get("gender") == "Both") { print("active"); } %>">Both</button>'+
+					'<button class="btn <% if (this.model.get("gender") == "Either") { print("active"); } %>">Either</button></div>'+
+				'<div id="lengths">'+
+					'<label>Length</label>'+
+					'<input type="textbox" class="input-small" id="length-min" placeholder="min" value="<%= this.model.get("length").min %>">'+
+					' - '+
+					'<input type="textbox" class="input-small" id="length-max" placeholder="max" value="<%= this.model.get("length").max %>">'+
+				'</div>'+
+				'<label>Usage</label>'+
+				'<div class="btn-group" id="usage-buttons">'+
+				'<button class="btn <% if (this.model.get("usage") == "Used") { print("active"); } %>">Used</button>'+
+				'<button class="btn <% if (this.model.get("usage") == "Unused") { print("active"); } %>">Unused</button>'+
+				'<button class="btn <% if (this.model.get("usage") == "Either") { print("active"); } %>">Either</button></div>'+
+				'<label class="checkbox"><input type="checkbox" id="favorites-only" <% if (this.model.get("favorite")) { print("checked=checked"); } %>> Favorites only</label>'+
+				'<button class="btn" id="submit-search">Search</button><br>'+
+				'<button class="btn" id="add-name">Add a name</button>'+
+			'</fieldset></form>'
+			
+		),
+
+		render: function () {
+			var attributes = this.model.toJSON();
+			this.$el.html(this.template(attributes))
+			$('#search-row').html(this.$el.html());
+			//console.log(this.$el)
+		},
+
+		make_search_term: function (term, classification) {
+			term = typeof term !== 'undefined' ? term : "";
+			classification = typeof classification !== 'undefined' ? classification : "meaning";
+			
+			$option_name = $('<option value="name" >Name</option>')
+			$option_meaning = $('<option value="meaning" >Meaning</option>')
+
+			if(classification == "name"){
+				$option_name.attr('selected', 'selected')
+			}
+
+			if(classification == "meaning"){
+				$option_meaning.attr('selected', 'selected')
+			}
+
 			$term_div = $('<div class="search-term"></div>')
-			$term_text = $('<input type="text" />').addClass('search-query')
-			$term_select =  $('<select></select>').addClass('input-small')
-							.append($('<option value="name">Name</option>'))
-							.append($('<option value="meaning" selected="selected">Meaning</option>'))
-			return $term_div.append($term_text).append($term_select)
-		}
-		
-		function make_origin(){
+			$term_text = $('<input type="text" value="'+term+'"/>').addClass('search-query')
+			$term_select =  $('<select></select>').addClass('input-small search-classification')
+							.append($option_name)
+							.append($option_meaning)
+			$tmp_container = $('<div></div>')
+			return $tmp_container.append($term_div.append($term_text).append($term_select)).html()
+		},
+
+		make_origin: function (origin) {
+			origin = typeof origin !== 'undefined' ? origin : "";
+			
+
+			master_origins = [
+				$('<option value="any" selected="selected">Any</option>'),
+				$('<option value="america" >America</option>'),
+				$('<option value="france" >France</option>'),
+			]
 			$origin_div = $('<div class="origin"></div>')
 			$origin_select = 	$('<select></select>')
-								.append('<option selected="selected">Any</option>')
-								.append('<option>America</option>')
-			return $origin_div.append($origin_select)
-		}
+			_.each(master_origins, function (element, index, list) {
+				if(element.val() == origin){
+					element.attr('selected', 'selected')
+				}
+				$origin_select.append(element)
+			})
+			$tmp_container = $('<div></div>')					
+			return $tmp_container.append($origin_div.append($origin_select)).html()
+		},
+		update_search_terms: function (e) {
+			//e.currentTarget contains all search terms.  when one is updated, we update them all so we dn't have to have a unique id for each line
+			var terms = []
+			$('.search-term', $(e.currentTarget)).each(function(){
+				var data = {
+					'term': $('.search-query', this).val(),
+					'classification': $('.search-classification', this).val()
+				};
+				
+				terms.push(data);
+			})
+			//console.log(terms);
+			this.model.update_search_terms(terms);
+			
+		},
+		update_origins: function (e) {
+			var origins = []
+			$('.origin', $(e.currentTarget)).each(function () {
+				origins.push($('select', this).val())
+			});
+			this.model.update_origins(origins);
+		},
+		update_gender: function (e){
 
-						
-
-		$('#add-term').on('click', function (e){
+			var gender = $('.btn.active', $(e.currentTarget)).text()
+			this.model.update_gender(gender);
+		},
+		update_lengths: function (e){
+			var lengths = {'min':$('#length-min').val(), 'max':$('#length-max').val()}
+			this.model.update_lengths(lengths);
+		},
+		update_usage: function (e){
+			var usage = $('.btn.active', $(e.currentTarget)).text()
+			this.model.update_usage(usage);
+		},
+		update_favorites: function (e){
+			var favorites = false
+			if($('#favorites-only:checked').length){
+				favorites = true
+			} else {
+				favorites = false
+			}
+			this.model.update_favorites(favorites);
+		},
+		redraw_button_group: function (e){
 			e.preventDefault();
-			$('#search-terms').append(make_search_term())
-		});
-
-		$('#add-origin').on('click', function (e){
+			$(e.currentTarget).siblings().removeClass('active');
+			$(e.currentTarget).addClass('active');
+		},
+		add_search_term: function (e) {
 			e.preventDefault();
-			$('#origins').append(make_origin())
-		});
-
-		$('.btn-group ').on('click', 'button', function (e){
+			var terms = this.model.get('search_terms')
+			
+			terms.push({
+				"term": "",
+				"classification": "meaning"
+			})
+			this.model.set({"search_terms":terms})
+			this.render()
+		},
+		add_origin: function (e){
+			e.preventDefault()
+			var origins = this.model.get('origins')
+			origins.push("any")
+			this.model.set({"origins": origins})
+			this.render()
+		},
+		submit_form: function (e) {
 			e.preventDefault();
-			$(this).siblings().removeClass('active');
-			$(this).addClass('active');
-		});
-
-		$('#submit-search').on('click', function (e) {
-			e.preventDefault();
-			alert('clicked');
-		});
+			console.log("FORM SHOULD BE SUBMITTED NOW")
+		},
+		
 	});
+	
+	searchForm = new SearchForm(default_search_form)
+	searchView = new SearchView({model:searchForm});
+	searchView.render();
+
+	//$('#search-row').html(searchView.$el.html()); this is done in render now
+	
 </script>
 
 {% endblock %}
